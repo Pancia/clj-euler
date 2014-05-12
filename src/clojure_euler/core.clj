@@ -5,6 +5,7 @@
   "is x divisible by y"
   (zero? (rem x y)))
   
+; sum of all numbers < 1000 that are div by 3 or 5
 (defn euler-1 []
   (reduce + 
     (filter #(or (isdiv? % 3) (isdiv? % 5))
@@ -37,14 +38,66 @@
     (- (square-of-sum nums) (sum-of-squares nums))))
 
 (defn -main
-  "prints result of project euler solutions"
+  "prints my solutions to euler and 4clojure problems"
   [& args]
   (println "Hello, GitHub!")
   (println (euler-1))
   (println (euler-2))
   (println (euler-4))
-  (println (euler-6)))
+  (println (euler-6))
+  
+  ;some clever code
+  ((resolve (symbol "println")) 
+    "Say hello to Magic!")
+)
 
+(defn char-ify
+  [arg]
+  (println (clojure.string/split arg #""))
+  (clojure.string/split arg #""))
 
+(use 'clojure.data)
 
+(defn str-diff
+  [arg1 arg2]
+  (let [arg-diff (diff (char-ify arg1) (char-ify arg2))]
+    (println arg1 arg2 ":" arg-diff)
+    (max 
+      (count-not-nil (first arg-diff)) 
+      (count-not-nil (second arg-diff))
+    )
+  )
+)
+
+(defn str-neighbor?
+  [arg1 arg2]
+  (println `(str-diff ~arg1 ~arg2) (str-diff arg1 arg2))
+  (= (str-diff arg1 arg2) 1)
+)
+
+(defn has-str-neighbor?
+  [arg args]
+  (println "arg:" arg " args:" args)
+  (if (= (count args) 1)
+    (str-neighbor? arg (first args))
+    (if (str-neighbor? arg (first args))
+      true
+      (has-str-neighbor? arg (rest args))
+    )
+  )
+)
+
+(defn is-word-chain?
+  [arg];of type set
+  ;filter out all elements that 
+  ;dont have at least 1 neighbor
+  (let [ans 
+        (for [x arg 
+              :when (has-str-neighbor? x (disj arg x))]
+          x)]
+    (print (= ans ans))
+    (println ans) 
+    (= ans arg)
+  )
+)
 
